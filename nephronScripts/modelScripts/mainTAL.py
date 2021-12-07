@@ -1,28 +1,24 @@
 import scipy.integrate as sci
-#import feather
 import numpy as np
 import pandas as pd
-#import time
 
 import equations
 import pc
 
-J_AtC = 4.39e-4
+J_AtC = 1.70e-3
 ExpType = 1 ## in vivo = Pyruvate in cytoplasm clamped, cytoplasm has specified water
 ## volume
 StateType = 1 ## Default, remaining Pyruvate concentrations not clamped
 
-pc.pcPC.k_O2 = pc.pcPC.k_O2 / 2.0
-
 def f(t, y): ## Differential equations, with optional arguments specified
-    return equations.conservationEqs1(y, J_AtC = J_AtC,
+    return equations.conservationEqsmTAL(y, J_AtC = J_AtC,
                               ExpType = ExpType,
                               StateType = StateType,
-                              w = [1.0, 1.0, 1.0, 1.0],
-                              tubule = "mTAL")
+                              w = [1.0, 1.0, 1.0, 1.0])
 
 def main(): ## Runs differential equation for time span and outputs results to
     ## a csv file and a feather file.
+
     results = sci.solve_ivp(fun = f,
                             t_span = (0, 100000),
                             y0 = pc.finalConditions,
@@ -45,13 +41,13 @@ def main(): ## Runs differential equation for time span and outputs results to
                                       "FUM_c", "ICIT_i", "ICIT_c", "GLC_c", "G6P_c",
                                       "PCr_c", "AMP_c"])
     results.to_csv("../results/resultsmTAL.csv")
-    #feather.write_dataframe(results, "../results/resultsmTAL.feather")
     return results
 
 #start = time.time()
 a = main()
+print(a)
 #end = time.time()
 #print(end-start)
 
 finalConditions = np.array(a.tail(1)) ## Remove the first element before use
-print(finalConditions)
+#print(finalConditions[0][pc.pcIS.iATP_c+1])

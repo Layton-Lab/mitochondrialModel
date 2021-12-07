@@ -6,22 +6,22 @@ localSensitivity <- read.csv("../results/localSensitivityStates.csv")
 localSensitivity$X <- NULL
 dirLS <- matrix(0, nrow = 40, ncol = 63)
 
-typical <- c(4.94456820e-08, 1.59763746e+02, 9.80310651e-04,
-            1.39468935e-03, 3.75000000e-04, 2.13605999e-03, 2.86397001e-03,
-            5.96404775e-03, 6.26326288e-05, 2.81510568e-04, 1.42221113e-10,
-            3.00855373e-03, 8.60862501e-04, 1.68141513e-05, 8.33678891e-04,
-            6.53701589e-08, 1.24169868e-06, 1.91531720e-05, 2.17728435e-05,
-            1.05001221e-05, 7.81325727e-03, 9.33456035e-10, 1.23762721e-01,
-            2.04478558e-03, 6.69000000e-05, 2.14000000e-02, 5.87830773e-04,
-            2.33313719e-03, 3.75528768e-04, 3.97460558e-05, 3.63317537e-03,
-            6.30960000e-08, 1.00300000e-03, 1.30000000e-01, 2.32607099e-03,
-            3.82594969e-04, 3.63501215e-03, 6.30960000e-08, 4.00000000e-04,
-            1.10000000e-01, 1.76746364e-04, 1.53123144e-04, 1.53750000e-04,
-            5.29858412e-04, 5.29858419e-04, 4.87545358e-04, 4.87545354e-04,
-            1.14089807e-05, 1.14089807e-05, 6.14061438e-06, 6.14061437e-06,
-            2.79715128e-07, 2.79715130e-07, 5.53787414e-03, 5.53787414e-03,
-            1.50000000e-05, 6.25000000e-05, 7.08405956e-05, 7.08405956e-05,
-            7.25000000e-03, 9.12500000e-05, 4.60957541e-03, 4.13812337e-05)
+typical <- c(4.34260851e-08, 1.55176612e+02, 9.84096832e-04, 1.39090317e-03,
+             3.75000000e-04, 2.14730531e-03, 2.85272469e-03, 7.78911327e-03,
+             6.15169703e-05, 2.84209686e-04, 1.49368365e-10, 3.00851364e-03,
+             8.63430185e-04, 1.70942773e-05, 1.18871334e-03, 6.58407994e-08,
+             1.28131386e-06, 2.04542575e-05, 2.28931607e-05, 1.08154743e-05,
+             8.54706553e-03, 7.46929765e-10, 1.29102218e-01, 1.95937766e-03,
+             6.69000000e-05, 2.14000000e-02, 6.48462171e-04, 2.27659478e-03,
+             4.20507320e-04, 5.10751058e-05, 3.73659863e-03, 6.30960000e-08,
+             1.00300000e-03, 1.30000000e-01, 2.26959646e-03, 4.27505639e-04,
+             3.73841777e-03, 6.30960000e-08, 4.00000000e-04, 1.10000000e-01,
+             1.99840050e-04, 1.53093432e-04, 1.53750000e-04, 3.91272198e-04,
+             3.91272203e-04, 5.35814089e-04, 5.35814086e-04, 9.32724461e-06,
+             9.32724461e-06, 4.87510034e-06, 4.87510034e-06, 1.90908103e-07,
+             1.90908104e-07, 5.34736887e-03, 5.34736887e-03, 1.50000000e-05,
+             6.25000000e-05, 7.08405956e-05, 7.08405956e-05, 7.25000000e-03,
+             9.12500000e-05, 4.08102233e-03, 5.29520697e-05)
 
 for (i in 0:38) {
   dirLS[i+1, ] <- 100*(unlist(localSensitivity[2*i+1, ])-
@@ -172,31 +172,33 @@ dirLSPT <- dirLS
 # To run this code: 1. Source localSensitivityAnalysis.R,
 # 2. Source localSensitivityAnalysismTAL.R,
 # 3. Then run the commented code
-
-# dirLSsmallPT <- dirLSPT[c(2, 9, 10, 27, 35), colSums(abs(dirLSPT[ 
-#   c(2, 9, 10, 27, 35), ])) > 0.5 | colSums(abs(dirLS[ 
+# 
+# dirLSsmallPT <- dirLSPT[c(2, 9, 10, 27, 35), colSums(abs(dirLSPT[
+#   c(2, 9, 10, 27, 35), ])) > 0.5 | colSums(abs(dirLS[
 #     c(2, 9, 10, 27, 35), ])) > 0.5]
-# dirLSsmallTAL <- dirLS[c(2, 9, 10, 27, 35), colSums(abs(dirLSPT[ 
-#   c(2, 9, 10, 27, 35), ])) > 0.5 | colSums(abs(dirLS[ 
+# dirLSsmallTAL <- dirLS[c(2, 9, 10, 27, 35), colSums(abs(dirLSPT[
+#   c(2, 9, 10, 27, 35), ])) > 0.5 | colSums(abs(dirLS[
 #     c(2, 9, 10, 27, 35), ])) > 0.5]
 # 
-# colnames(dirLSsmallTAL) <- colnames(dirLSsmallPT) <- c("PDH Activity", "AKGD Activity", 
+# colnames(dirLSsmallTAL) <- colnames(dirLSsmallPT) <- c("PDH Activity", "AKGD Activity",
+#                           "Complex II Activity",
 #                           "Complex III Activity", "Complex IV Activity",
 #                           "ANT Activity", "k_Pi1", "k_Pi2",
-#                           "Total CytC", "Total CoQ", "Total NAD+/NADH", 
-#                           "k_O2", "K Leak", "Max. ATP Consumption")
-# rownames(dirLSsmallTAL) <- rownames(dirLSsmallPT) <- c("Electrical Potential", "NADH", "QH2", 
+#                           "Total CytC", "Total CoQ", "Total NAD+/NADH",
+#                           "Complex IV Oxygen Affinity",
+#                           "Max. ATP Consumption")
+# rownames(dirLSsmallTAL) <- rownames(dirLSsmallPT) <- c("Electrical Potential", "NADH", "QH2",
 #                           "Reduced CytC", "Cytosolic ATP")
 # 
 # pdf("../dataVis/combinedLS.pdf", width = 10)
-# par(mar = c(10.1, 8.1, 1.1, 2.1), las = 2, cex.axis = 1, mfrow = c(1, 2))
-# plot(dirLSsmallPT, 
+# par(mar = c(12.1, 8.1, 1.1, 2.1), las = 2, cex.axis = 1, mfrow = c(1, 2))
+# plot(dirLSsmallPT,
 #      col = viridis::viridis, main = "",
 #      xlab = "", ylab = "", breaks = seq(from = -1.5, to = 1.5, by = 0.25),
 #      key = NULL)
-# par(mar = c(10.1, 6.1, 1.1, 4.1))
+# par(mar = c(12.1, 6.1, 1.1, 4.1))
 # plot(dirLSsmallTAL,
 #      col = viridis::viridis, main = "",
 #      xlab = "", ylab = "", breaks = seq(from = -1.5, to = 1.5, by = 0.25))
 # dev.off()
-
+# 

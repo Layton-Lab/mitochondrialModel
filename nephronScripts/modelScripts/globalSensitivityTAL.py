@@ -17,11 +17,11 @@ def f(t, y, pW, J_AtC, glyc, params):
                               ExpType = ExpType,
                               StateType = StateType,
                               potassiumW = pW,
-                              glyc = glyc,
+                              glyc = glyc, tubule = "mTAL",
                               params = params)
 
 normpcPC = pc.pcPC
-normParam = pc.params
+normParam = pc.paramsmTAL
 
 
 def modelPredictions(params):
@@ -30,7 +30,7 @@ def modelPredictions(params):
            np.array([24]), np.linspace(30, 40, 11)), dtype = np.int64,
            casting = 'unsafe')
     ## Change pc.params as necessary
-    newParams = np.array(pc.params)
+    newParams = np.array(pc.paramsmTAL)
     newParams[ran] = params[0:len(ran)]
     #pc.params = list(newParams)
     ## Change pcPC
@@ -90,7 +90,7 @@ def main():
                                                           pc.pcPC.Qtot, pc.pcPC.NADtot,
                                                           pc.pcPC.FADtot, pc.pcPC.k_O2,
                                                           pc.pcPC.k_mADP],
-                                                        [1., 1.256e-3, 2.3e-4]))
+                                                        [1., 1.7e-3, 2.3e-4]))
     bottoms = defaults*0.4
     tops = defaults*2.5
     ranges = [[bottoms[i], tops[i]] for i in range(len(defaults))]
@@ -137,9 +137,9 @@ def main():
         importantStateVars.append(stateVars[i])
         Si = sobol.analyze(ranges, y[:,i])
         totalSi, firstSi, secondSi = Si.to_df()
-        totalSi.to_csv("../results/totalSi"+str(i)+".csv")
-        firstSi.to_csv("../results/firstSi"+str(i)+".csv")
-        secondSi.to_csv("../results/secondSi"+str(i)+".csv")
+        totalSi.to_csv("../results/totalSi"+str(i)+"mTAL.csv")
+        firstSi.to_csv("../results/firstSi"+str(i)+"mTAL.csv")
+        secondSi.to_csv("../results/secondSi"+str(i)+"mTAL.csv")
     print(importantStateVars)
     print("Done.")
 

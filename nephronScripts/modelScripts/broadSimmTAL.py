@@ -9,13 +9,12 @@ from classDefs import timeError
 import equations
 import pc
 
-J_AtC = 4.39e-4 ## Used by Edwards et al.
+J_AtC = 1.70e-3
 ExpType = 1 ## in vivo = Pyruvate in cytoplasm clamped, cytoplasm has specified water
 ## volume
 StateType = 1 ## Default, remaining Pyruvate concentrations not clamped
 
-hleaknorm = pc.params[38]
-pc.pcPC.k_O2 = pc.pcPC.k_O2 / 2.0
+hleaknorm = pc.paramsmTAL[38]
 
 def main(): ## Runs differential equation for time span and outputs results to
     ## a csv file and a feather file.
@@ -33,16 +32,15 @@ def main(): ## Runs differential equation for time span and outputs results to
                 weight[i] = l
                 print(list(j))
                 k+=1
-                pc.params[38] = list(j)[0]*hleaknorm
+                pc.paramsmTAL[38] = list(j)[0]*hleaknorm
                 ics[pc.pcIS.iO2_x] = list(j)[2]*pc.ics[pc.pcIS.iO2_x]
                 a = time.time()
-                f = lambda t, y: equations.conservationEqs1(y, J_AtC = J_AtC,
+                f = lambda t, y: equations.conservationEqsmTAL(y, J_AtC = J_AtC,
                               ExpType = ExpType,
                               StateType = StateType,
                               w = weight,
                               timeStart = a,
-                              glyc = list(j)[1],
-                              tubule = "mTAL")
+                              glyc = list(j)[1])
                 try:
                     results = sci.solve_ivp(fun = f,
                             t_span = (0, 1000),

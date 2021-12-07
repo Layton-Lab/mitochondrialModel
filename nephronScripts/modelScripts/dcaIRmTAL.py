@@ -6,7 +6,7 @@ import pandas as pd
 import equations
 import pc
 
-J_AtC = 4.39e-4
+J_AtC = 1.70e-3
 ExpType = 1 ## in vivo = Pyruvate in cytoplasm clamped, cytoplasm has specified water
 ## volume
 StateType = 1 ## Default, remaining Pyruvate concentrations not clamped
@@ -16,13 +16,13 @@ normO2 = pc.finalConditions[pc.pcIS.iO2_x]
 
 def f(t, y): ## Differential equations, with optional arguments specified
     print(t)
-    return equations.conservationEqs1(y, J_AtC = J_AtC, tubule = "mTAL",
+    return equations.conservationEqsmTAL(y, J_AtC = J_AtC,
                               ExpType = ExpType, DCA = 1.5,
                               StateType = StateType)
 
 def g(t, y): ## Differential equations, with optional arguments specified
     print(t)
-    return equations.conservationEqs1(y, J_AtC = J_AtC, tubule = "mTAL",
+    return equations.conservationEqsmTAL(y, J_AtC = J_AtC,
                               ExpType = ExpType,
                               StateType = StateType)
 
@@ -37,10 +37,9 @@ def main(): ## Runs differential equation for time span and outputs results to
 
 
     ## Pool becomes smaller post-ischemia
-    pc.pcPC.NADtot = pc.pcPC.NADtot * 0.5
-    finalIschemia[pc.pcIS.iATP_c] = finalIschemia[pc.pcIS.iATP_c] * 0.25
-    finalIschemia[pc.pcIS.iADP_c] = finalIschemia[pc.pcIS.iADP_c] * 0.25
-    finalIschemia[pc.pcIS.iAMP_c] = finalIschemia[pc.pcIS.iAMP_c] * 0.25
+    finalIschemia[pc.pcIS.iATP_c] = finalIschemia[pc.pcIS.iATP_c] * 0.3
+    finalIschemia[pc.pcIS.iADP_c] = finalIschemia[pc.pcIS.iADP_c] * 0.3
+    finalIschemia[pc.pcIS.iAMP_c] = finalIschemia[pc.pcIS.iAMP_c] * 0.3
     pc.finalConditions = finalIschemia
     pc.finalConditions[pc.pcIS.iO2_x] = normO2
 
