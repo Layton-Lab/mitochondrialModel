@@ -20,13 +20,14 @@ hleaknorm = pc.params[38]
 def main(): ## Runs differential equation for time span and outputs results to
     ## a csv file and a feather file.
     for i in range(7):
+        print(i)
         pc.pcPC.W_m = W_m
         pc.pcPC.W_i = 0.1*W_i
         pc.pcPC.W_x = 0.9*W_x
         pc.pcPC.NADtot = nadtotnorm
         pc.ics[pc.pcIS.iO2_x] = o2norm
         pc.params[38] = hleaknorm
-        J_AtC = 0.000439
+        J_AtC = 1.70e-3
 
         ## Conditions to reproduce (for the altered model) Table 3's observations from Edwards et al
         if i == 0:
@@ -52,10 +53,10 @@ def main(): ## Runs differential equation for time span and outputs results to
                     ExpType = ExpType, StateType = StateType, tubule = "mTAL")
 
         results = sci.solve_ivp(fun = f,
-                            t_span = (0, 100000),
-                            y0 = pc.ics,
+                            t_span = (0, 1000),
+                            y0 = pc.finalConditions,
                             method = "LSODA",
-                            atol = 1e-8,
+                            atol = 1e-10,
                             rtol = 1e-10)
         results = np.concatenate((np.array([results.t]), results.y)).transpose()
         results = pd.DataFrame(results,

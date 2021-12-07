@@ -4,17 +4,16 @@ import pandas as pd
 import pc as pc
 import fluxesmTAL as fl
 
-J_AtC = 4.39e-4 ## Used by Edwards et al.
+J_AtC = 1.70e-3
 ExpType = 1 ## in vivo = Pyruvate in cytoplasm clamped, cytoplasm has specified water
 ## volume
 StateType = 1 ## Default, remaining Pyruvate concentrations not clamped
 
 o2norm = pc.ics[pc.pcIS.iO2_x]
-hleaknorm = pc.params[38]
+hleaknorm = pc.paramsmTAL[38]
 hcnorm = pc.ics[pc.pcIS.iH_c]
 kcnorm = pc.ics[pc.pcIS.iK_c]
 mgcnorm = pc.ics[pc.pcIS.iMg_c]
-pc.pcPC.k_O2 = pc.pcPC.k_O2 / 2.0
 
 ## Conversion factor taken from Edwards et al 2019
 rho_m = 3.0545e-6
@@ -28,7 +27,7 @@ def main():
     normal = pd.read_csv("../results/resultsmTAL.csv").tail(1).to_numpy()[0]
     normal = np.delete(normal, [0, 1])
     flVals = fl.fluxesmTAL(normal,
-                       param=pc.params,
+                       param=pc.paramsmTAL,
                        ExpType=ExpType,
                        potassiumW=1.0)
     JO2 = (flVals[pc.pcFl.J_C4] / 2.) * convert
@@ -67,11 +66,11 @@ def main():
         if i == 2:
             pc.ics[pc.pcIS.iO2_x] = o2norm*(2.5/10.0)
         if i == 3:
-            J_AtC = 1.2e-4
-        if i == 4:
             J_AtC = 0.5*J_AtC
+        if i == 4:
+            J_AtC = 1.0e-3
         if i == 5:
-            J_AtC = 1.4e-3
+            J_AtC = 2.2e-3
         if i == 6:
             pc.ics[pc.pcIS.iH_c] = 10**-7.4
         if i == 7:
@@ -87,24 +86,25 @@ def main():
         if i == 12:
             pc.ics[pc.pcIS.iMg_c] = 0.8e-3
         if i == 13:
-            pc.params[38] = 0.0
+            pc.paramsmTAL[38] = 0.0
             pW = 0.0
         if i == 14:
-            pc.params[38] = 0.0
+            pc.paramsmTAL[38] = 0.0
         if i == 15:
-            pc.params[38] = 0.0
+            pc.paramsmTAL[38] = 0.0
             pW = 10.0
         if i == 16:
-            pc.params[38] = hleaknorm*10.0
+            pc.paramsmTAL[38] = hleaknorm*10.0
             pW = 0.0
         if i == 17:
-            pc.params[38] = hleaknorm*10.0
+            pc.paramsmTAL[38] = hleaknorm*10.0
         if i == 18:
-            pc.params[38] = hleaknorm*10.0
+            pc.paramsmTAL[38] = hleaknorm*10.0
             pW = 10.0
 
         ## Calculate fluxes
-        flVals = fl.fluxesmTAL(mpFile, param = pc.params, ExpType = ExpType, potassiumW= pW)
+        flVals = fl.fluxesmTAL(mpFile, param = pc.paramsmTAL,
+                               ExpType = ExpType, potassiumW= pW)
 
         ## Collecting relevant results
         JO2 = (flVals[pc.pcFl.J_C4]/2.)*convert

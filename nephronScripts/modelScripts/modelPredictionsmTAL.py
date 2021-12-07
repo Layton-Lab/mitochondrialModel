@@ -6,18 +6,16 @@ import pandas as pd
 import equations
 import pc
 
-J_AtC = 4.39e-4
+J_AtC = 1.70e-3
 ExpType = 1 ## in vivo = Pyruvate in cytoplasm clamped, cytoplasm has specified water
 ## volume
 StateType = 1 ## Default, remaining Pyruvate concentrations not clamped
 
 o2norm = pc.finalConditions[pc.pcIS.iO2_x]
-hleaknorm = pc.params[38]
+hleaknorm = pc.paramsmTAL[38]
 hcnorm = pc.ics[pc.pcIS.iH_c]
 kcnorm = pc.ics[pc.pcIS.iK_c]
 mgcnorm = pc.ics[pc.pcIS.iMg_c]
-
-pc.pcPC.k_O2 = pc.pcPC.k_O2 / 2.0
 
 def main(): ## Runs differential equation for time span and outputs results to
     ## a csv file and a feather file.
@@ -28,10 +26,10 @@ def main(): ## Runs differential equation for time span and outputs results to
         pc.ics[pc.pcIS.iMg_c] = mgcnorm
         pc.ics[pc.pcIS.iNADH_x] = min(pc.ics[pc.pcIS.iNADH_x],
                                       pc.pcPC.NADtotmTAL/2.0)
-        pc.params[38] = hleaknorm
+        pc.paramsmTAL[38] = hleaknorm
         pW = 1.0
-        J_AtC = 4.39e-4
-
+        J_AtC = 1.70e-3
+        print(i)
         ## Conditions to reproduce (for the altered model) Table 3's observations from Edwards et al
         if i == 0:
             pc.ics[pc.pcIS.iO2_x] = o2norm*(20.0/10.0)
@@ -40,11 +38,11 @@ def main(): ## Runs differential equation for time span and outputs results to
         if i == 2:
             pc.ics[pc.pcIS.iO2_x] = o2norm*(2.5/10.0)
         if i == 3:
-            J_AtC = 1.2e-4
-        if i == 4:
             J_AtC = 0.5*J_AtC
+        if i == 4:
+            J_AtC = 1.0e-3
         if i == 5:
-            J_AtC = 1.4e-3
+            J_AtC = 2.2e-3
         if i == 6:
             pc.ics[pc.pcIS.iH_c] = 10**-7.4
         if i == 7:
@@ -60,29 +58,28 @@ def main(): ## Runs differential equation for time span and outputs results to
         if i == 12:
             pc.ics[pc.pcIS.iMg_c] = 0.8e-3
         if i == 13:
-            pc.params[38] = 0.0
+            pc.paramsmTAL[38] = 0.0
             pW = 0.0
         if i == 14:
-            pc.params[38] = 0.0
+            pc.paramsmTAL[38] = 0.0
         if i == 15:
-            pc.params[38] = 0.0
+            pc.paramsmTAL[38] = 0.0
             pW = 10.0
         if i == 16:
-            pc.params[38] = hleaknorm*10.0
+            pc.paramsmTAL[38] = hleaknorm*10.0
             pW = 0.0
         if i == 17:
-            pc.params[38] = hleaknorm*10.0
+            pc.paramsmTAL[38] = hleaknorm*10.0
         if i == 18:
-            pc.params[38] = hleaknorm*10.0
+            pc.paramsmTAL[38] = hleaknorm*10.0
             pW = 10.0
         glyc = 0.0
         #glyc = 1.83e-5 ## Default is to comment this out
 
-        f = lambda t, y : equations.conservationEqs1(y, J_AtC = J_AtC,
+        f = lambda t, y : equations.conservationEqsmTAL(y, J_AtC = J_AtC,
                                                      ExpType = ExpType,
                                                      StateType = StateType,
                                                      potassiumW = pW,
-                                                     tubule = "mTAL",
                                                      glyc = glyc)
 
         results = sci.solve_ivp(fun = f,

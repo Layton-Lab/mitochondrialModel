@@ -1,48 +1,35 @@
-import itertools
 import scipy.integrate as sci
 import feather
 import numpy as np
 import pandas as pd
-import time as time
+#import time
 
-from classDefs import timeError
 import equations
 import pc
 
-J_AtC = 1.70e-3
 ExpType = 1 ## in vivo = Pyruvate in cytoplasm clamped, cytoplasm has specified water
 ## volume
 StateType = 1 ## Default, remaining Pyruvate concentrations not clamped
 
-def g(t, y, i, a):
-    print(t)
-    return equations.conservationEqsmTAL(y, J_AtC=J_AtC,
-                               ExpType=ExpType,
-                               StateType=StateType,
-                               w=list(i),
-                               timeStart=a)
+pc.pcPC.k_O2mTAL = pc.pcPC.k_O2mTAL * 2.0
 
-def main(): ## Runs differential equation for time span and outputs results to
-    ## a csv file and a feather file.
-    ics = pc.finalConditions
-    w = [0.25, 0.5, 0.75, 1]
-    j = 0
-    for i in itertools.product(w, w, w, w):
-        print(i)
-        a = time.time()
-        f = lambda t, y: g(t, y, i = i, a = a)
-        j+=1
-        try:
-            results = sci.solve_ivp(fun = f,
-                            t_span = (0, 1000),
-                            y0 = ics,
+def f(t, y, J_AtC = 1.70e-3, w = [1., 1., 1., 1.]): ## Differential equations, with optional arguments specified
+    return equations.conservationEqs1(y, J_AtC = J_AtC,
+                              ExpType = ExpType,
+                              StateType = StateType,
+                              tubule = "mTAL", w = w)
+
+def main():
+    pc.finalConditions[pc.pcIS.iO2_x] = 0.1*pc.finalConditions[pc.pcIS.iO2_x]
+    g = lambda t, y: f(t, y, w = [1., 1., 0.25, 1.])
+    results = sci.solve_ivp(fun = g,
+                            t_span = (0, 100000),
+                            y0 = pc.finalConditions,
                             method = "LSODA",
                             atol = 1e-10,
                             rtol = 1e-10)
-        except timeError:
-            continue
-        results = np.concatenate((np.array([results.t]), results.y)).transpose()
-        results = pd.DataFrame(results,
+    results = np.concatenate((np.array([results.t]), results.y)).transpose()
+    results = pd.DataFrame(results,
                            columns = ["t", "H_x", "dPsi", "ATP_x", "ADP_x",
                                       "AMP_x", "GTP_x", "GDP_x", "Pi_x", "NADH_x",
                                       "QH2_x", "OAA_x", "ACCOA_x", "CIT_x", "ICIT_x",
@@ -56,10 +43,8 @@ def main(): ## Runs differential equation for time span and outputs results to
                                       "ASP_i", "ASP_c", "GLU_i", "GLU_c", "FUM_i",
                                       "FUM_c", "ICIT_i", "ICIT_c", "GLC_c", "G6P_c",
                                       "PCr_c", "AMP_c"])
-        results.to_csv("../results/resultsDiseasemTALATP"+str(j)+
-                               ".csv")
-        #feather.write_dataframe(results, "../results/resultsDiseasemTALATP"+str(j)+
-        #                        "Fe.feather", version = 1)
-        print(results)
+    results.to_csv("../results/resultsMechCIVmTAL.csv")
+    return results
 
-main()
+a = main()
+print(a)
