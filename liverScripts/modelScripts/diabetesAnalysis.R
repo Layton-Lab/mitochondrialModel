@@ -97,7 +97,7 @@ ggplot(diabetes, aes(x = Cred_i/0.0058387)) +
   geom_histogram(aes(colour = CIV, fill = CIV)) +
   xlab("Cytochrome C Redox State") +
   ylab("Frequency") +
-  geom_vline(xintercept = diabetes[348, ]$Cred_i/0.0058387, col = "red") +
+  geom_vline(xintercept = diabetes[423, ]$Cred_i/0.0058387, col = "red") +
   xlim(c(0, 1)) + 
   theme(axis.title = element_text(size = 18), legend.title = element_text(size = 18),
         legend.text = element_text(size = 18), axis.text = element_text(size = 18))

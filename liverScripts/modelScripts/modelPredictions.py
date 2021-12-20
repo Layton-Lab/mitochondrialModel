@@ -76,7 +76,7 @@ def main(): ## Runs differential equation for time span and outputs results to
             pW = 10.0
 
         f = lambda t, y : equations.conservationEqs(y,
-                            J_AtC = J_AtC,ExpType = ExpType, StateType = StateType,
+                            J_AtC = J_AtC, ExpType = ExpType, StateType = StateType,
                             potassiumW = pW, glyc = glyc)
 
         results = sci.solve_ivp(fun = f,
