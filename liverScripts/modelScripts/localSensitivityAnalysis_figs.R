@@ -56,7 +56,7 @@ rownames(dirLS) <- c("Vmax1", "Vmax2", "Vmax3", "Vmax4", "Vmax5", "Vmax6", "Vmax
 pdf("../dataVis/localSensitivityOverall.pdf", width = 20, height = 20)
 par(mar = c(10.1, 10.1, 2.1, 4.1), las = 2)
 tempDirLS <- dirLS
-rownames(tempDirLS) <- c("PDH Activity", "ICITS Activity", "ACON Activity", 
+rownames(tempDirLS) <- c("PDH Activity", "CITS Activity", "ACON Activity", 
                          "ISOD Activity", "AKGD Activity", "SCOAS Activity", 
                          "SDH Activity", "FUM Activity", "MDH Activity", 
                          "NDK Activity", "GOT Activity", 

@@ -35,7 +35,8 @@ def main():
     ARatio = ATPc / ADPc
     pmf = normal[pc.pcIS.idPsi] + ((pc.pcPC.RT * np.log(10)) / pc.pcPC.F) * \
           ((np.log10(normal[pc.pcIS.iH_i])) - (np.log10(normal[pc.pcIS.iH_x])))
-    values = {"JO2": JO2, "JATP": JATP, "PO": PO, "PMF": pmf, "ATPc": ATPc * 1000.,
+    values = {"JO2": JO2, "JATP": JATP, "PO": PO, "dPsi": normal[pc.pcIS.idPsi],
+              "PMF": pmf, "ATPc": ATPc * 1000.,
               "ATP/ADP Ratio": ARatio}
     for key in values.keys():
         print(np.round(values[key], 2), end='')
@@ -45,7 +46,7 @@ def main():
 
     ## The other cases
 
-    for i in range(19):
+    for i in range(20):
         pc.ics[pc.pcIS.iO2_x] = o2norm
         pc.ics[pc.pcIS.iH_c] = hcnorm
         pc.ics[pc.pcIS.iK_c] = kcnorm
@@ -57,8 +58,8 @@ def main():
         ## Open files
         mpFile = pd.read_csv("../results/resultsMP"+str(i)+".csv").tail(1).to_numpy()[0]
         mpFile = np.delete(mpFile, [0, 1])
+        #print(mpFile)
 
-        #print(mpFile[pc.pcIS.idPsi])
         ## Conditions to reproduce (for the altered model) Table 3's observations from Edwards et al
         if i == 0:
             mpFile[pc.pcIS.iO2_x] = o2norm*(50./36.)
@@ -100,6 +101,8 @@ def main():
         if i == 17:
             pc.params[38] = hleaknorm*10.0
         if i == 18:
+            pW = 10.0
+        if i == 19:
             pc.params[38] = hleaknorm*10.0
             pW = 10.0
 
@@ -117,7 +120,8 @@ def main():
               ((np.log10(mpFile[pc.pcIS.iH_i])-np.log10(mpFile[pc.pcIS.iH_x])))
 
         ## Table values
-        values = {"JO2": JO2, "JATP": JATP, "PO": PO, "PMF": pmf, "ATPc": ATPc*1000.,
+        values = {"JO2": JO2, "JATP": JATP, "PO": PO, "dPsi": mpFile[pc.pcIS.idPsi]
+        ,"PMF": pmf, "ATPc": ATPc*1000.,
                   "ATP/ADP Ratio": ARatio}
         for key in values.keys():
             print(np.round(values[key], 2), end = '')
@@ -130,3 +134,4 @@ def main():
 
 
 main()
+

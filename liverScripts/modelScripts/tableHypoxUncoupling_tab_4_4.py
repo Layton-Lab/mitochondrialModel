@@ -35,7 +35,8 @@ def main():
     ARatio = ATPc / ADPc
     pmf = normal[pc.pcIS.idPsi] + ((pc.pcPC.RT * np.log(10)) / pc.pcPC.F) * \
           ((np.log10(normal[pc.pcIS.iH_i])) - (np.log10(normal[pc.pcIS.iH_x])))
-    values = {"JO2": JO2, "JATP": JATP, "PO": PO, "PMF": pmf, "ATPc": ATPc * 1000.,
+    values = {"JO2": JO2, "JATP": JATP, "PO": PO, "dPsi": normal[pc.pcIS.idPsi],
+              "PMF": pmf, "ATPc": ATPc * 1000.,
               "ATP/ADP Ratio": ARatio}
     for key in values.keys():
         print(np.round(values[key], 2), end='')
@@ -52,11 +53,11 @@ def main():
 
         ## Open files
         if i == 0:
-            mpFile = pd.read_csv("../results/resultsHypoxiaExtreme.csv").loc[4300, ].to_numpy()
+            mpFile = pd.read_csv("../results/resultsHypoxiaExtreme.csv").loc[7700, ].to_numpy()
         elif i == 1:
-            mpFile = pd.read_csv("../results/resultsHypoxia0.csv").loc[2700, ].to_numpy()
+            mpFile = pd.read_csv("../results/resultsHypoxia0.csv").loc[6200, ].to_numpy()
         elif i == 2:
-            mpFile = pd.read_csv("../results/resultsHypoxia4.csv").loc[1800, ].to_numpy()
+            mpFile = pd.read_csv("../results/resultsHypoxia4.csv").loc[6000, ].to_numpy()
         elif i == 3:
             mpFile = pd.read_csv("../results/resultsHleak1.csv").tail(1).to_numpy()[0]
         elif i == 4:
@@ -95,7 +96,8 @@ def main():
               ((np.log10(mpFile[pc.pcIS.iH_i])-np.log10(mpFile[pc.pcIS.iH_x])))
 
         ## Table values
-        values = {"JO2": JO2, "JATP": JATP, "PO": PO, "PMF": pmf, "ATPc": ATPc*1000.,
+        values = {"JO2": JO2, "JATP": JATP, "PO": PO, "dPsi": mpFile[pc.pcIS.idPsi],
+                  "PMF": pmf, "ATPc": ATPc*1000.,
                   "ATP/ADP Ratio": ARatio}
         for key in values.keys():
             print(np.round(values[key], 2), end = '')

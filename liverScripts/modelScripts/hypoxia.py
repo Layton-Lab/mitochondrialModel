@@ -36,7 +36,7 @@ def main(): ## Runs differential equation for time span and outputs results to
     g = lambda t, y: f(t, y, O2baseline=O2norm, O2stress=O2new)
     results = sci.solve_ivp(fun=g,
                             t_span=(0, 50000),
-                            y0=pc.livFinalConditions,
+                            y0=pc.finalConditions,
                             method="LSODA",
                             atol=1e-8,
                             rtol=1e-8)
@@ -63,7 +63,7 @@ def main(): ## Runs differential equation for time span and outputs results to
         g = lambda t, y: f(t, y, O2baseline = O2norm, O2stress = O2new)
         results = sci.solve_ivp(fun = g,
                             t_span = (0, 50000),
-                            y0 = pc.livFinalConditions,
+                            y0 = pc.finalConditions,
                             method = "LSODA",
                             atol = 1e-8,
                             rtol = 1e-8)

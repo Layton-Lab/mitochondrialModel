@@ -1,8 +1,14 @@
 ## In order to run this file, you should first run (in kidney and liver directories) diabetesComplex.py, 
 ## ("") diabetesCollectVals.R, and ("") writeProduct.py
 
-if (!grepl("mitochondrialModel/nephronScripts/modelScripts", getwd())) {
-  setwd("./nephronScripts/modelScripts")
+# if (!grepl("mitochondrialModel/nephronScripts/modelScripts", getwd())) {
+#   setwd("./nephronScripts/modelScripts")
+# }
+setwd("modelScripts")
+
+gg_color_hue <- function(n) {
+  hues = seq(15, 375, length = n + 1)
+  hcl(h = hues, l = 65, c = 100)[1:n]
 }
 
 tails <- read.csv("../results/tailsDiabetesComplex.csv")
@@ -21,8 +27,8 @@ colnames(iterprod) <- c("nums", "CI", "CIII", "CIV", "ATP", "Leak", "PO2")
 
 diabetesTAL <- dplyr::inner_join(iterprod, tails, by = "nums")
 diabetesTAL$V1 <- diabetesTAL$t <- diabetesTAL$X <- NULL
-setwd("..")
-setwd("..")
+#setwd("..")
+#setwd("..)
 setwd("../liverScripts/modelScripts")
 
 tails <- read.csv("../results/tailsDiabetes.csv")
@@ -60,7 +66,7 @@ h <- ggplot(diabetesTAL, aes(x = 1000*ATP_c)) +
 i <- ggplot(diabetesLiv, aes(x = 1000*ATP_c)) +
   geom_histogram(aes(fill = PO2)) +
   xlab("Hepatocyte ATP (mM)") +
-  xlim(c(0, 7)) +
+  xlim(c(0, 7.5)) +
   ylab("Frequency") + 
   geom_vline(xintercept = diabetesLiv[348, ]$ATP_c*1000, col = "red") +
   theme(axis.title = element_text(size = 18), legend.title = element_text(size = 18), 
@@ -85,7 +91,7 @@ b <- ggplot(diabetesTAL, aes(x = QH2_x/(0.00178*0.83))) +
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18),
         legend.position = "none")
 
-c <- ggplot(diabetesLiv, aes(x = QH2_x/(6.49e-3*0.2))) +
+cg <- ggplot(diabetesLiv, aes(x = QH2_x/(6.49e-3*0.2))) +
   geom_histogram(aes(fill = PO2)) +
   xlab("Hepatocyte Coenzyme Q Redox State") +
   xlim(c(-0.025, 1)) +
@@ -94,10 +100,10 @@ c <- ggplot(diabetesLiv, aes(x = QH2_x/(6.49e-3*0.2))) +
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18), 
         legend.title = element_text(size = 18),
         legend.text = element_text(size = 18))
-c$labels$fill <- "Relative\nOxygen\nTension"
+cg$labels$fill <- "Relative\nOxygen\nTension"
 
 pdf("../dataVis/multipanelCoQDiabetes.pdf", width = 12)
-gridExtra::grid.arrange(a, b, c, nrow = 1, widths = c(1, 1, 1.2))
+gridExtra::grid.arrange(a, b, cg, nrow = 1, widths = c(1, 1, 1.2))
 dev.off()
 
 d <- ggplot(diabetesPT, aes(x = Cred_i/2.148e-3)) +
@@ -135,7 +141,7 @@ dev.off()
 
 ## Figure 5.5
 pdf("../dataVis/multipanelDiabetes.pdf", width = 14)
-gridExtra::grid.arrange(g, h, i, a, b, c, d, e, f, nrow = 3, widths = c(1, 1, 1.2))
+gridExtra::grid.arrange(g, h, i, a, b, cg, d, e, f, nrow = 3, widths = c(1, 1, 1.2))
 dev.off()
 
 ## Multipanel with just uncoupling and hypoxia
@@ -198,7 +204,7 @@ b <- ggplot(diabetesTAL, aes(x = QH2_x/(0.00178*0.83))) +
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18),
         legend.position = "none")
 
-c <- ggplot(diabetesLiv, aes(x = QH2_x/(6.49e-3*0.2))) +
+cg <- ggplot(diabetesLiv, aes(x = QH2_x/(6.49e-3*0.2))) +
   geom_histogram(aes(fill = PO2)) +
   xlab("Hepatocyte Coenzyme Q Redox State") +
   xlim(c(-0.025, 1)) +
@@ -207,7 +213,7 @@ c <- ggplot(diabetesLiv, aes(x = QH2_x/(6.49e-3*0.2))) +
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18), 
         legend.title = element_text(size = 18),
         legend.text = element_text(size = 18))
-c$labels$fill <- "Relative\nOxygen\nTension"
+cg$labels$fill <- "Relative\nOxygen\nTension"
 
 d <- ggplot(diabetesPT, aes(x = Cred_i/2.148e-3)) +
   geom_histogram(aes(fill = PO2)) +
@@ -240,7 +246,7 @@ f$labels$fill <- "Relative\nOxygen\nTension"
 
 ## Figure 5.4
 pdf("../dataVis/multipanelUncouplingHypoxia2.pdf", width = 14)
-gridExtra::grid.arrange(g, h, i, a, b, c, d, e, f, nrow = 3, widths = c(1, 1, 1.2))
+gridExtra::grid.arrange(g, h, i, a, b, cg, d, e, f, nrow = 3, widths = c(1, 1, 1.2))
 dev.off()
 
 diabetesPT <- olddiabetesPT[olddiabetesPT$Leak == 1. & olddiabetesPT$PO2 == 1., ]
@@ -281,7 +287,7 @@ b <- ggplot(diabetesTAL, aes(x = QH2_x/(0.00178*0.83))) +
         legend.text = element_text(size = 18))
 b$labels$fill <- "Complex I\nActivity"
 
-c <- ggplot(diabetesLiv, aes(x = QH2_x/(6.49e-3*0.2))) +
+cg <- ggplot(diabetesLiv, aes(x = QH2_x/(6.49e-3*0.2))) +
   geom_histogram(aes(fill = CI)) +
   xlab("Hepatocyte Coenzyme Q Redox State") +
   xlim(c(-0.025, 1)) +
@@ -289,12 +295,13 @@ c <- ggplot(diabetesLiv, aes(x = QH2_x/(6.49e-3*0.2))) +
   geom_vline(xintercept = diabetesLiv[423, ]$QH2_x/(6.49e-3*0.2), col = "red") + 
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18), 
         legend.title = element_text(size = 18),
-        legend.text = element_text(size = 18))
-c$labels$fill <- "Complex I\nActivity"
+        legend.text = element_text(size = 18)) +
+  scale_fill_manual(values = gg_color_hue(4)[c(2, 3, 4)])
+cg$labels$fill <- "Complex I\nActivity"
 
 ## Figure 5.2
 pdf("../dataVis/multipanelQH2OXPHOS.pdf")
-gridExtra::grid.arrange(a, b, c)
+gridExtra::grid.arrange(a, b, cg)
 dev.off()
 
 g <- ggplot(diabetesPT, aes(x = 1000*ATP_c)) +
@@ -321,7 +328,8 @@ i <- ggplot(diabetesLiv, aes(x = 1000*ATP_c)) +
   xlim(c(0, 7.5)) +
   ylab("Frequency") + 
   theme(axis.title = element_text(size = 18), legend.title = element_text(size = 18), 
-        axis.text = element_text(size = 18), legend.text = element_text(size = 18))
+        axis.text = element_text(size = 18), legend.text = element_text(size = 18)) +
+  scale_fill_manual(values = c(gg_color_hue(4), gg_color_hue(5)[5]))
 i$labels$fill <- "Complex IV\nActivity"
 
 ## Figure 5.1
@@ -360,7 +368,8 @@ f <- ggplot(diabetesLiv, aes(x = Cred_i/0.0058387)) +
   geom_vline(xintercept = diabetesLiv[423, ]$Cred_i/0.0058387, col = "red") + 
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18), 
         legend.title = element_text(size = 14),
-        legend.text = element_text(size = 14))
+        legend.text = element_text(size = 14)) +
+  scale_fill_manual(values = c(gg_color_hue(4), gg_color_hue(5)[5]))
 f$labels$fill <- "Complex IV\nActivity"
 
 ## Figure 5.3

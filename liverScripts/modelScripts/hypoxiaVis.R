@@ -24,3 +24,13 @@ for (i in 1:11) {
   lines(hypoxia[[i]]$t, hypoxia[[i]]$ATP_c*1000, col = colVal[i])
 }
 dev.off()
+
+atpLevels <- sapply(hypoxia, function(x) min(x$ATP_c))*1000
+o2Levels <- c(0.5/36, (1:10)/10)
+
+pdf("../dataVis/hypoxiaResponseLiver.pdf")
+par(cex.axis = 2, cex.lab = 1.5)
+plot(o2Levels, atpLevels, col = "red", cex = 0.5, xlab = "Fold-Change in Oxygen Tension",
+     ylab = "Cytosolic ATP (mM)")
+lines(o2Levels, atpLevels, col = "red")
+dev.off()
