@@ -14,14 +14,14 @@ StateType = 1 ## Default, remaining Pyruvate concentrations not clamped
 
 def f(t, y, i = 10, k = 1): ## Differential equations, with optional arguments specified
     print(t)
-    if t > 30:
-        pc.params[37] = 3.172e5*20*(i/10.0)
+    if t > 60:
+        pc.paramsmTAL[37] = 3.172e5*20*(i/10.0)
     else:
-        pc.params[37] = 3.172e5
-    return equations.conservationEqs1(y, J_AtC = J_AtC,
+        pc.paramsmTAL[37] = 3.172e5
+    return equations.conservationEqsmTAL(y, J_AtC = J_AtC,
                               ExpType = ExpType,
                               StateType = StateType,
-                              potassiumW = k, tubule = "mTAL")
+                              potassiumW = k)
 
 def main(): ## Runs differential equation for time span and outputs results to
     ## a csv file and a feather file.
