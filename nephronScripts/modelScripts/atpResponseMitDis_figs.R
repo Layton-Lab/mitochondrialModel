@@ -106,6 +106,51 @@ ATP <- sapply(tails, function(x) if (is.null(x)) {return(NA)} else {unlist(x)[37
 # dev.off()
 
 ## Figure 3.9
+
+pdf("../dataVis/univarPlatePTATP.pdf")
+par(cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.5)
+
+plot(c(0.25, 0.5, 0.75, 1), ATP[(matrixStats::rowProds(as.matrix(iterProd)) == 1.0 |
+                                   iterProd[ , 1] != 1.0) & univar], col = "green", ylim = c(0, 2.5),
+     xlim = c(0.2, 1), xlab = "Fraction of Typical Activity", ylab = "Cytosolic ATP (mM)")
+CI <- splinefun(c(0.25, 0.5, 0.75, 1), 
+                ATP[(matrixStats::rowProds(as.matrix(iterProd)) == 1.0 |
+                       iterProd[ , 1] != 1.0) & univar])
+curve(CI, from = 0.2, to = 1, add = T, col = "green")
+
+points(c(0.25, 0.5, 0.75, 1), ATP[(matrixStats::rowProds(as.matrix(iterProd)) == 1.0 |
+                                   iterProd[ , 2] != 1.0) & univar], col = 'blue')
+#rect(c(0.25, 0.5, 0.75, 1)-0.05, rep(0, 4)-0.0001, c(0.25, 0.5, 0.75, 1)+0.05, 
+#     ATP[(matrixStats::rowProds(as.matrix(iterProd)) == 1.0 | iterProd[ , 2] != 1.0) & univar],
+#     col = "springgreen")
+CIII <- splinefun(c(0.25, 0.5, 0.75, 1), ATP[(matrixStats::rowProds(as.matrix(iterProd)) == 1.0 |
+                                                iterProd[ , 2] != 1.0) & univar])
+curve(CIII, from = 0.2, to = 1, add = T, col = "blue")
+
+points(c(0.25, 0.5, 0.75, 1), ATP[(matrixStats::rowProds(as.matrix(iterProd)) == 1.0 |
+                                   iterProd[ , 3] != 1.0) & univar], col = "purple")
+#rect(c(0.25, 0.5, 0.75, 1)-0.05, rep(0, 4)-0.0001, c(0.25, 0.5, 0.75, 1)+0.05, 
+#     ATP[(matrixStats::rowProds(as.matrix(iterProd)) == 1.0 | iterProd[ , 3] != 1.0) & univar],
+#     col = "springgreen")
+CIV <- splinefun(c(0.25, 0.5, 0.75, 1), ATP[(matrixStats::rowProds(as.matrix(iterProd)) == 1.0 |
+                                               iterProd[ , 3] != 1.0) & univar])
+curve(CIV, from = 0.2, to = 1., add = T, col = "purple")
+
+points(c(0.25, 0.5, 0.75, 1), ATP[(matrixStats::rowProds(as.matrix(iterProd)) == 1.0 |
+                                   iterProd[ , 4] != 1.0) & univar], col = "orange")
+#rect(c(0.25, 0.5, 0.75, 1)-0.05, rep(0, 4)-0.0001, c(0.25, 0.5, 0.75, 1)+0.05, 
+#     ATP[(matrixStats::rowProds(as.matrix(iterProd)) == 1.0 | iterProd[ , 4] != 1.0) & univar],
+#     col = "springgreen")
+ATPcurve <- splinefun(c(0.25, 0.5, 0.75, 1), ATP[(matrixStats::rowProds(as.matrix(iterProd)) == 1.0 |
+                                                    iterProd[ , 4] != 1.0) & univar])
+curve(ATPcurve, from = 0.2, to = 1, add = T, col = "orange")
+
+abline(h = min(ATP), col = "red")
+
+legend(x = 0.65, y = 0.75, fill = c("orange", "green", "blue", "purple"),
+       legend = c("ATP Synthase", "Complex I", "Complex III", "Complex IV"), cex = 1.5)
+dev.off()
+
 pdf("../dataVis/univarPlates.pdf")
 par(mfrow = c(2, 2), cex.lab = 1.5, cex.main = 1.5, cex.axis = 1.5)
 
@@ -329,10 +374,11 @@ ggplot(container, aes(x = ATP_c*1000)) +
 dev.off()
 
 ## Table 3.7 uses these values
-LMPSI <- lm(allResults$dPsi ~ allResults$CI + allResults$CIII + allResults$CIV, allResults)
+LMPSI <- lm(allResults$ATP_c ~ allResults$CI + allResults$CIII + allResults$CIV, allResults)
 print(summary(LMPSI))
 
-LMPSIMix <- lm(allResults$dPsi ~ allResults$CI + allResults$CIII + allResults$CIV, allResults)
+LMPSIMix <- lm(allResults$ATP_c ~ allResults$CI + allResults$CIII + allResults$CIV +
+                 allResults$CI*allResults$CIII*allResults$CIV, allResults)
 print(summary(LMPSIMix))
 
 container <- allResults

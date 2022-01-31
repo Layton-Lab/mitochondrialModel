@@ -13,7 +13,7 @@ lowKDF <- readfn(lowK)
 normalKDF <- readfn(normalK)
 highKDF <- readfn(highK)
 
-beforefn <- function(x) sapply(x, function(x) tail(x[x$t < 30, ], 1)$dPsi)
+beforefn <- function(x) sapply(x, function(x) tail(x[x$t < 60, ], 1)$dPsi)
 
 beforelowKtails <- beforefn(lowKDF)
 beforenormalKtails <- beforefn(normalKDF)
@@ -48,7 +48,7 @@ pdf("../dataVis/kleakKHAntiporterAbsTAL.pdf")
 par(cex.axis = 1.5, cex.lab = 1.5)
 fHigh <- splinefun(x = c(1, 1:10*2), y = c(beforehighKtails[1], afterhighKtails))
 curve(fHigh, from = 1, to = 20, col = "red", ylab = "Electrical Potential Gradient (mV)",
-      xlab = "Fold Change in Potassium-Hydrogen Antiporter Activity", ylim = c(145, 170))
+      xlab = "Fold Change in Potassium-Hydrogen Antiporter Activity", ylim = c(145, 175))
 points(x = c(1, 1:10*2), y = c(beforehighKtails[1], afterhighKtails), col = "red")
 fNormal <- splinefun(x = c(1, 1:10*2), y = c(beforenormalKtails[1], afternormalKtails))
 curve(fNormal, from = 1, to = 20, add = T, col = "green")

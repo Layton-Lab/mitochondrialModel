@@ -54,14 +54,14 @@ dcaATP <- c(joinedTable$ATP_c[joinedTable$CI == 0.5 &
             0.002330648, 
             0.002359787) ## See above
 
-pdf("../dataVis/ifosfamidedPsi.pdf")
-par(cex.lab = 1.5)
-plot(dcadPsi, ylim = c(155, max(dcadPsi)), xlim = c(0, 5),
-     xaxt = "n", xlab = "Conditions", cex = 0.1, ylab = "dPsi (mV)")
-rect(1:4-0.5, rep(154.78, 4), 1:4+0.5, dcadPsi, col = "springgreen")
-axis(side = 1, at = 1:4, labels = c("DCA+/Ifos+", "DCA+/Ifos-", 
-                                    "DCA-/Ifos+", "DCA-/Ifos-"))
-dev.off()
+# pdf("../dataVis/ifosfamidedPsi.pdf")
+# par(cex.lab = 1.5)
+# plot(dcadPsi, ylim = c(155, max(dcadPsi)), xlim = c(0, 5),
+#      xaxt = "n", xlab = "Conditions", cex = 0.1, ylab = "dPsi (mV)")
+# rect(1:4-0.5, rep(154.78, 4), 1:4+0.5, dcadPsi, col = "springgreen")
+# axis(side = 1, at = 1:4, labels = c("DCA+/Ifos+", "DCA+/Ifos-", 
+#                                     "DCA-/Ifos+", "DCA-/Ifos-"))
+# dev.off()
 
 pdf("../dataVis/ifosfamideATP.pdf", width = 12)
 par(cex.lab = 2.5, cex.axis = 1.75, mar = c(5.1, 5.1, 4.1, 2.1))
@@ -163,7 +163,8 @@ dev.off()
 
 pdf("../dataVis/atpleakOXPHOSCIIImultivar.pdf")
 container <- mitDisPlusLeak
-container$CIII <- as.factor(mitDisPlusLeak$CIII)
+container <- container[!(container$CIII == 0.25 & container$ATP_c > 1.8e-3), ]
+container$CIII <- as.factor(container$CIII)
 p <- ggplot(container, aes(x = 1000*ATP_c)) +
   geom_histogram(aes(fill = CIII)) +
   xlab("Cytosolic ATP (mM)") +
@@ -217,7 +218,8 @@ dev.off()
 
 pdf("../dataVis/atpleakOXPHOSCIIIDCAmultivar.pdf")
 container <- jtBigger
-container$CIII <- as.factor(jtBigger$CIII)
+container <- container[!(container$CIII == 0.25 & container$ATP_c > 1.8e-3), ]
+container$CIII <- as.factor(container$CIII)
 p <- ggplot(container, aes(x = ATP_c*1000)) +
   geom_histogram(aes(fill = CIII)) +
   xlab("Cytosolic ATP (mM)") +

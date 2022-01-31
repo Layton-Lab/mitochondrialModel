@@ -46,3 +46,19 @@ legend(x = c(20800-5000, 25300-5000)/3600, y = c(0.001*1000, 0.0022*1000), legen
        cex = 1)
 
 dev.off()
+
+
+f <- function(x) {
+  x <- x[x$t > 1, ]
+  min(x$ATP_c)
+}
+
+hypoxiaMins <- sapply(hypoxia, f)
+
+o2fn <- splinefun((1:10)/10, 1000*hypoxiaMins)
+
+pdf("../dataVis/hypoxiamTALresponse.pdf")
+par(cex.axis = 1.5, cex.lab = 1.5)
+plot((1:10)/10, hypoxiaMins*1000, xlab = "Fold Change in Oxygen Tension", ylab = "Cytosolic ATP (mM)")
+curve(o2fn, from = 0, to = 1, add = T)
+dev.off()

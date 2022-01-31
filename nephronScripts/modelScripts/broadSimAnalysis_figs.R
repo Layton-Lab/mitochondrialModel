@@ -1,6 +1,10 @@
 ## In order to run this file, you should first run broadSimmTAL.py, writeProduct.py, and then
 ## collectBroadSim.R
 
+if (!grepl("mitochondrialModel/modelScripts", getwd())) {
+  setwd("./modelScripts")
+}
+
 drugSimParam <- as.data.frame(feather::read_feather(
   "../results/iterProdBroadSim.feather"))
 
@@ -30,7 +34,7 @@ joinedTable <- dplyr::inner_join(drugSimParam, drugSimTails, by = 'k')
 mitDis$V1 <- NULL
 joinedTable <- rbind(joinedTable, mitDis)
 
-joinedTable <- joinedTable[!duplicated(joinedTable[2:8]), ]
+#joinedTable <- joinedTable[!duplicated(joinedTable[2:8]), ]
 
 ## Not especially sensitive to changes due to dichloroacetate alone
 O2Only <- joinedTable[joinedTable$CI == 1 & joinedTable$CIII == 1
@@ -83,12 +87,13 @@ dev.off()
 ## Figure 3.16
 pdf("../dataVis/atpleakOXPHOSO2mTALmultivar.pdf")
 container <- joinedTable
-container$O2Level <- as.factor(joinedTable$O2Level)
+container$O2Level <- as.factor(container$O2Level)
 p <- ggplot(container, aes(x = ATP_c*1000)) +
   geom_histogram(aes(fill = O2Level)) +
   xlab("Cytosolic ATP (mM)") +
-  ylab("Frequency")
-p$labels$fill <- "Relative \nComplex IV \nActivity"
+  ylab("Frequency") +
+  xlim(c(0, 3))
+p$labels$fill <- "Relative \nOxygen \nTension"
 p +
   theme(axis.title = element_text(size = 18), legend.title = element_text(size = 18),
         legend.text = element_text(size = 18), axis.text = element_text(size = 18))
@@ -105,17 +110,18 @@ ggplot(container, aes(x = dPsi)) +
 
 ## Figure 3.15
 pdf("../dataVis/atpCIVmTAL.pdf")
+container <- mitDis
+container$CIV <- as.factor(container$CIV)
 par(cex.lab = 1.5, cex.axis = 1.5)
-container$O2Level <- as.factor(container$O2Level)
 p <- ggplot(container, aes(x = ATP_c*1000)) +
-  geom_histogram(aes(fill = O2Level)) +
+  geom_histogram(aes(fill = CIV), bins = 20) +
   xlab("Cytosolic ATP (mM)") +
   ylab("Frequency") + 
   theme(axis.title = element_text(size = 18), 
         legend.title = element_text(size = 18),
         legend.text = element_text(size = 18), 
         axis.text = element_text(size = 18))
-p$labels$fill <- "Oxygen\nTension"
+p$labels$fill <- "Relative\nComplex IV\nActivity"
 p
 dev.off()
 
