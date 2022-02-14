@@ -162,6 +162,7 @@ g <- ggplot(diabetesPT, aes(x = 1000*ATP_c)) +
   xlab("PT ATP (mM)") +
   ylab("Frequency") + 
   xlim(c(0, 3)) +
+  geom_vline(xintercept = diabetesPT[3, ]$ATP_c*1000, col = "red") +
   theme(axis.title = element_text(size = 18), legend.position = "none", 
         axis.text = element_text(size = 18))
 
@@ -170,14 +171,16 @@ h <- ggplot(diabetesTAL, aes(x = 1000*ATP_c)) +
   xlab("mTAL ATP (mM)") +
   xlim(c(0, 3)) +
   ylab("Frequency") + 
+  geom_vline(xintercept = diabetesTAL[3, ]$ATP_c*1000, col = "red") +
   theme(axis.title = element_text(size = 18), legend.position = "none", 
         axis.text = element_text(size = 18))
 
 i <- ggplot(diabetesLiv, aes(x = 1000*ATP_c)) +
   geom_histogram(aes(fill = PO2)) +
   xlab("Hepatocyte ATP (mM)") +
-  xlim(c(0, 7)) +
+  xlim(c(0, 8)) +
   ylab("Frequency") + 
+  geom_vline(xintercept = diabetesLiv[3, ]$ATP_c*1000, col = "red") +
   theme(axis.title = element_text(size = 18), legend.title = element_text(size = 18), 
         axis.text = element_text(size = 18), legend.text = element_text(size = 18))
 i$labels$fill <- "Relative\nOxygen\nTension"
@@ -191,7 +194,7 @@ a <- ggplot(diabetesPT, aes(x = QH2_x/(0.00178*0.83))) +
   xlab("PT Coenzyme Q Redox State") +
   xlim(c(0, 1)) +
   ylab("Frequency") +
-  geom_vline(xintercept = diabetesPT[348, ]$QH2_x/(0.00178*0.83), col = "red") + 
+  geom_vline(xintercept = diabetesPT[3, ]$QH2_x/(0.00178*0.83), col = "red") + 
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18),
         legend.position = "none")
 
@@ -200,7 +203,7 @@ b <- ggplot(diabetesTAL, aes(x = QH2_x/(0.00178*0.83))) +
   xlab("mTAL Coenzyme Q Redox State") +
   xlim(c(0, 1)) +
   ylab("Frequency") +
-  geom_vline(xintercept = diabetesTAL[348, ]$QH2_x/(0.83*0.00178), col = "red") + 
+  geom_vline(xintercept = diabetesTAL[3, ]$QH2_x/(0.83*0.00178), col = "red") + 
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18),
         legend.position = "none")
 
@@ -209,7 +212,7 @@ cg <- ggplot(diabetesLiv, aes(x = QH2_x/(6.49e-3*0.2))) +
   xlab("Hepatocyte Coenzyme Q Redox State") +
   xlim(c(-0.025, 1)) +
   ylab("Frequency") +
-  geom_vline(xintercept = diabetesLiv[423, ]$QH2_x/(6.49e-3*0.2), col = "red") + 
+  geom_vline(xintercept = diabetesLiv[3, ]$QH2_x/(6.49e-3*0.2), col = "red") + 
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18), 
         legend.title = element_text(size = 18),
         legend.text = element_text(size = 18))
@@ -220,7 +223,7 @@ d <- ggplot(diabetesPT, aes(x = Cred_i/2.148e-3)) +
   xlab("PT Cytochrome C Redox State") +
   xlim(c(0, 1)) +
   ylab("Frequency") +
-  geom_vline(xintercept = diabetesPT[348, ]$Cred_i/2.148e-3, col = "red") + 
+  geom_vline(xintercept = diabetesPT[3, ]$Cred_i/2.148e-3, col = "red") + 
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18),
         legend.position = "none")
 
@@ -229,7 +232,7 @@ e <- ggplot(diabetesTAL, aes(x = Cred_i/2.148e-3)) +
   xlab("mTAL Cytochrome C Redox State") +
   xlim(c(0, 1)) +
   ylab("Frequency") +
-  geom_vline(xintercept = diabetesTAL[348, ]$Cred_i/2.148e-3, col = "red") + 
+  geom_vline(xintercept = diabetesTAL[3, ]$Cred_i/2.148e-3, col = "red") + 
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18),
         legend.position = "none")
 
@@ -238,7 +241,7 @@ f <- ggplot(diabetesLiv, aes(x = Cred_i/0.0058387)) +
   xlab("Hepatocyte Cytochrome C Redox State") +
   xlim(c(0, 1)) +
   ylab("Frequency") +
-  geom_vline(xintercept = diabetesLiv[423, ]$Cred_i/0.0058387, col = "red") + 
+  geom_vline(xintercept = diabetesLiv[3, ]$Cred_i/0.0058387, col = "red") + 
   theme(axis.title = element_text(size = 18), axis.text = element_text(size = 18), 
         legend.title = element_text(size = 18),
         legend.text = element_text(size = 18))
@@ -376,3 +379,4 @@ f$labels$fill <- "Complex IV\nActivity"
 pdf("../dataVis/multipanelCytCOXPHOSdiabetes.pdf")
 gridExtra::grid.arrange(d, e, f)
 dev.off()
+

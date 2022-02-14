@@ -20,7 +20,6 @@ pc.pcPC.Qtot = pc.pcPC.Qtot*0.2
 
 def main(): ## Runs differential equation for time span and outputs results to
     ## a csv file and a feather file.
-    ics = pc.finalConditions
     w1 = [0.5, 0.75, 1]
     w3 = [0.75, 1]
     w4 = [0.25, 0.5, 0.75, 1, 1.75]
@@ -33,8 +32,6 @@ def main(): ## Runs differential equation for time span and outputs results to
             print(list(i))
             print(list(j))
             k+=1
-            if k < 450:
-                continue
             pc.params[38] = list(j)[0]*hleaknorm
             pc.finalConditions[pc.pcIS.iO2_x] = list(j)[1]*O2norm
             a = time.time()
@@ -47,7 +44,7 @@ def main(): ## Runs differential equation for time span and outputs results to
             try:
                 results = sci.solve_ivp(fun = f,
                             t_span = (0, 1000),
-                            y0 = pc.livFinalConditions,
+                            y0 = pc.finalConditions,
                             method = "LSODA",
                             atol = 1e-8,
                             rtol = 1e-8)

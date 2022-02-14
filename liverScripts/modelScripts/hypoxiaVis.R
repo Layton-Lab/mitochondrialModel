@@ -4,14 +4,11 @@ if (!grepl("liverScripts/modelScripts", getwd())) {
 
 hypoxia <- list()
 hypoxia[[1]] <- data.table::fread("../results/resultsHypoxiaExtreme.csv")
-hypoxia[[1]] <- hypoxia[[1]][hypoxia[[1]]$t > 5000 &
-                                   hypoxia[[1]]$t < 25000,]
+hypoxia[[1]] <- hypoxia[[1]]
 
 for (i in 0:9) {
   hypoxia[[i+2]] <- data.table::fread(paste0("../results/resultsHypoxia", 
                                            i, ".csv"))
-  hypoxia[[i+2]] <- hypoxia[[i+2]][hypoxia[[i+2]]$t > 5000 &
-                                     hypoxia[[i+2]]$t < 25000,]
 }
 
 colVal <- rainbow(11)

@@ -19,6 +19,8 @@ mgcnorm = pc.ics[pc.pcIS.iMg_c]
 rho_m = 1.53e-6
 convert = 1e9 * rho_m
 
+pc.ics = pc.finalConditions
+
 def main():
     dictToPD = []
 
@@ -53,11 +55,11 @@ def main():
 
         ## Open files
         if i == 0:
-            mpFile = pd.read_csv("../results/resultsHypoxiaExtreme.csv").loc[7700, ].to_numpy()
+            mpFile = pd.read_csv("../results/resultsHypoxiaExtreme.csv").tail(1).to_numpy()[0]
         elif i == 1:
-            mpFile = pd.read_csv("../results/resultsHypoxia0.csv").loc[6200, ].to_numpy()
+            mpFile = pd.read_csv("../results/resultsHypoxia0.csv").tail(1).to_numpy()[0]
         elif i == 2:
-            mpFile = pd.read_csv("../results/resultsHypoxia4.csv").loc[6000, ].to_numpy()
+            mpFile = pd.read_csv("../results/resultsHypoxia4.csv").tail(1).to_numpy()[0]
         elif i == 3:
             mpFile = pd.read_csv("../results/resultsHleak1.csv").tail(1).to_numpy()[0]
         elif i == 4:

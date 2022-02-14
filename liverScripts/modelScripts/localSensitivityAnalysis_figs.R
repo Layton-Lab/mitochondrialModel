@@ -53,7 +53,7 @@ rownames(dirLS) <- c("Vmax1", "Vmax2", "Vmax3", "Vmax4", "Vmax5", "Vmax6", "Vmax
                      "pW", "J_AtC", "glyc")
 
 ## Figure 4.1
-pdf("../dataVis/localSensitivityOverall.pdf", width = 20, height = 20)
+pdf("../dataVis/localSensitivityOverallLiver.pdf", width = 20, height = 20)
 par(mar = c(10.1, 10.1, 2.1, 4.1), las = 2)
 tempDirLS <- dirLS
 rownames(tempDirLS) <- c("PDH Activity", "CITS Activity", "ACON Activity", 
@@ -167,9 +167,10 @@ colnames(dirLSsmall) <- c("Electrical Potential", "NADH", "QH2",
                           "Reduced CytC", "Cytosolic ATP")
 
 ## Figure 4.2
-pdf("../dataVis/importantLocalSensitivity.pdf", width = 10)
+pdf("../dataVis/importantLocalSensitivityLiver.pdf", width = 10)
 par(mar = c(10.1, 10.1, 1.1, 4.1), las = 2, cex.axis = 1)
 plot(t(dirLSsmall), 
      col = viridis::viridis(10), main = "",
      xlab = "", ylab = "")
-cdev.off()
+dev.off()
+

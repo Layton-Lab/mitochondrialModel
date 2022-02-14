@@ -1,4 +1,4 @@
-## Checks if changes to OXPHOS and CytC/CoQ levels to more PT-like levels are enough to
+## Checks if changes to CytC/CoQ levels to more PT-like levels are enough to
 ## explain liver differences
 
 import itertools
@@ -18,12 +18,12 @@ StateType = 1 ## Default, remaining Pyruvate concentrations not clamped
 
 hleaknorm = pc.params[38]
 O2norm = pc.finalConditions[pc.pcIS.iO2_x]
-pc.pcPC.Ctot = 1.956e-3*1.33#pc.pcPC.Ctot*1.33
 pc.pcPC.Qtot = 2.148e-3*0.2#pc.pcPC.Qtot*0.2
+pc.pcPC.Ctot = 1.956e-3*1.33#pc.pcPC.Ctot*1.33
 
 def main(): ## Runs differential equation for time span and outputs results to
     ## a csv file and a feather file.
-    ics = pc.finalConditions
+    pc.finalConditions[pc.pcIS.iH_c] = 6.3096e-008
     w1 = [0.5, 0.75, 1]
     w3 = [0.75, 1]
     w4 = [0.25, 0.5, 0.75, 1,
@@ -49,7 +49,7 @@ def main(): ## Runs differential equation for time span and outputs results to
             try:
                 results = sci.solve_ivp(fun = f,
                             t_span = (0, 1000),
-                            y0 = pc.livFinalConditions,
+                            y0 = pc.finalConditions,
                             method = "LSODA",
                             atol = 1e-8,
                             rtol = 1e-8)
