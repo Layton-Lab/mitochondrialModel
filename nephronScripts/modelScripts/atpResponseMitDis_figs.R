@@ -356,7 +356,8 @@ p <- ggplot(container, aes(x = ATP_c*1000)) +
   xlab("Cytosolic ATP (mM)") +
   ylab("Frequency") +
   theme(legend.text = element_text(size = 18), axis.title = element_text(size = 18),
-        legend.title = element_text(size = 18), axis.text = element_text(size = 18))
+        legend.title = element_text(size = 18), axis.text = element_text(size = 18)) +
+  xlim(c(0, 2.5))
 p$labels$fill <- "Relative \nComplex III \nActivity"
 p
 dev.off()

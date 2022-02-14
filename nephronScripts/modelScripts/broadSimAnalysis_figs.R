@@ -33,6 +33,7 @@ colnames(drugSimTails)[1] <- "k"
 joinedTable <- dplyr::inner_join(drugSimParam, drugSimTails, by = 'k')
 mitDis$V1 <- NULL
 joinedTable <- rbind(joinedTable, mitDis)
+write.csv(joinedTable, "../results/broadSimAllInOneTable.csv")
 
 #joinedTable <- joinedTable[!duplicated(joinedTable[2:8]), ]
 
@@ -87,12 +88,13 @@ dev.off()
 ## Figure 3.16
 pdf("../dataVis/atpleakOXPHOSO2mTALmultivar.pdf")
 container <- joinedTable
+container <- container[container$glycolysisLevel == 0., ]
 container$O2Level <- as.factor(container$O2Level)
 p <- ggplot(container, aes(x = ATP_c*1000)) +
   geom_histogram(aes(fill = O2Level)) +
   xlab("Cytosolic ATP (mM)") +
   ylab("Frequency") +
-  xlim(c(0, 3))
+  xlim(c(0, 2.5))
 p$labels$fill <- "Relative \nOxygen \nTension"
 p +
   theme(axis.title = element_text(size = 18), legend.title = element_text(size = 18),
